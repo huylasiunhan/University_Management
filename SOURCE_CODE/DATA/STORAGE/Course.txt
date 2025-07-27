@@ -1,0 +1,5 @@
+MajorID,ID,Name,ClassSectionIDs
+M001,C001,Object-Oriented Programming,CS001,CS002
+M001;M002,C002,Data Structures and Algorithms,CS003
+M002,C003,Operating Systems,CS004
+M003,C004,Networking,CS005
