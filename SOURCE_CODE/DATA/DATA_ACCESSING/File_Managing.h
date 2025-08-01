@@ -12,6 +12,9 @@ class FileManager{
 private:
     vector<string> fileReader(const string& input);
     void fileWriter(const string& output, const vector<string>& input);
+
+    friend class ParserStudent;
+    friend class ParserTeacher;
 };
 
 
