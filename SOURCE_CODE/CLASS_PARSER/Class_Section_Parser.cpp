@@ -11,7 +11,7 @@ static pair<int,int> parseScheduleIndex(const string& scheduleStr) {
     return {stoi(rowStr), stoi(colStr)};
 }
 
-ClassSection ClassSectionParser::parseFromCSV(const string& csvLine) {
+ClassSection ClassSectionParser::parseFromLine(const string& csvLine) {
     stringstream ss(csvLine);
     string id, courseId, teacherId, scoreId, scheduleStr, studentsStr;
 
@@ -26,4 +26,11 @@ ClassSection ClassSectionParser::parseFromCSV(const string& csvLine) {
     pair<int,int> schedule = parseScheduleIndex(scheduleStr);
 
     return ClassSection(id, courseId, teacherId, scoreId, schedule, students);
+}
+vector<ClassSection> ClassSectionParser::parseFromFile(const vector<string>& csvFile) {
+    vector<ClassSection> classSections;
+    for (const auto& line : csvFile) {
+        classSections.push_back(parseFromLine(line));
+    }
+    return classSections;
 }

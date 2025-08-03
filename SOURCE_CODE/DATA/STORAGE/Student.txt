@@ -1,0 +1,11 @@
+ID,Name,email,MajorID,ScoreIDs,EnrolledClassIDs
+S001,Nguyen Van A,nguyenvana@example.com,M001,SCR001;SCR002,CS001;CS002
+S002,Tran Thi B,tranb@example.com,M001,SCR001;SCR002,CS001;CS002
+S003,Le Van C,levanc@example.com,M001,SCR001;SCR002,CS001;CS002
+S004,Pham Thi D,phamthid@example.com,M002,SCR003;SCR004,CS003;CS004
+S005,Hoang Van E,hoange@example.com,M001,SCR001;SCR002,CS001;CS002
+S006,Nguyen Thi F,nguyenf@example.com,M002,SCR003;SCR004,CS003;CS004
+S007,Tran Van G,trang@example.com,M002,SCR003;SCR004,CS003;CS004
+S008,Le Thi H,leh@example.com,M002,SCR003;SCR004,CS003;CS004
+S009,Phan Van I,phani@example.com,M003,SCR005,CS005
+S010,Dao Thi K,daok@example.com,M003,SCR005,CS005

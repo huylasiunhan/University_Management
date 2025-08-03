@@ -16,3 +16,10 @@ Course CourseParser::parseFromCSV(const string& csvLine) {
 
     return Course(majorId, id, name, classSections);
 }
+vector<Course> CourseParser::parseFromFile(const vector<string>& csvFile) {
+    vector<Course> courses;
+    for (const auto& line : csvFile) {
+        courses.push_back(parseFromCSV(line));
+    }
+    return courses;
+}

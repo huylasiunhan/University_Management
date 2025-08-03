@@ -1,0 +1,19 @@
+#ifndef FILE_MANAGING_H
+#define FILE_MANAGING_H
+
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <string>
+
+using namespace std;
+
+class FileManager{
+private:
+    vector<string> fileReader(const string& input);
+    void fileWriter(const string& output, const vector<string>& input);
+};
+
+
+
+#endif

@@ -6,5 +6,6 @@ using namespace std;
 class ClassSectionParser {
 public:
     // Parse từ CSV -> ClassSection
-    static ClassSection parseFromCSV(const string& csvLine);
+    static ClassSection parseFromLine(const string& csvLine);
+    static vector<ClassSection> parseFromFile(const vector<string>& csvFile);
 };
