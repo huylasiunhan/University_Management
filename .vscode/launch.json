@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "C/C++ Runner: Debug Session",
+      "type": "lldb",
+      "request": "launch",
+      "args": [],
+      "cwd": "/Users/phungquochuy/Desktop/OOP/tempProject/University_Management/SOURCE_CODE/DATA/DATA_ACCESSING",
+      "program": "/Users/phungquochuy/Desktop/OOP/tempProject/University_Management/SOURCE_CODE/DATA/DATA_ACCESSING/build/Debug/outDebug"
+    }
+  ]
+}
