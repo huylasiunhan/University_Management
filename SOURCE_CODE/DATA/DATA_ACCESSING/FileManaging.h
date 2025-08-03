@@ -1,5 +1,5 @@
-#ifndef FILE_MANAGING_H
-#define FILE_MANAGING_H
+#ifndef FILEMANAGING_H
+#define FILEMANAGING_H
 
 #include <iostream>
 #include <fstream>
@@ -15,6 +15,7 @@ private:
 
     friend class ParserStudent;
     friend class ParserTeacher;
+    friend class ScoreParser;
 };
 
 

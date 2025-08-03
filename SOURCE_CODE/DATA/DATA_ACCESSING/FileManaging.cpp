@@ -1,9 +1,9 @@
-#include "File_Managing.h"
+#include "FileManaging.h"
 
 using namespace std;
 
 vector<string> FileManager::fileReader(const string& input){
-    const string path = "../STORAGE/";      // duong dan den thu muc STORAGE
+    const string path = "../../DATA/STORAGE/";      // duong dan den thu muc STORAGE
     string fullPath = path + input;
 
     ifstream fin(fullPath);
@@ -22,7 +22,7 @@ vector<string> FileManager::fileReader(const string& input){
 }
 
 void FileManager::fileWriter(const string& output, const vector<string>& input){
-    const string path = "../STORAGE/";      // duong dan den thu muc STORAGE
+    const string path = "../../DATA/STORAGE/";      // duong dan den thu muc STORAGE
     string fullPath = path + output;
 
     ofstream fout(fullPath);

@@ -1,4 +1,4 @@
-#include "File_Managing.h"
+#include "FileManaging.h"
 #include "Teacher.h"
 
 Teacher::Teacher(const std::string& id, const std::string& name, const std::string& email)

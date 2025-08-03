@@ -1,4 +1,4 @@
-#include "File_Managing.h"
+#include "FileManaging.h"
 #include "Student.h"
 
 Student::Student() : major(nullptr) {}
