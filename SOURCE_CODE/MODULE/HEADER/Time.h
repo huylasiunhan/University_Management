@@ -1,9 +1,11 @@
 #ifndef TIME_H
 #define TIME_H
+
 #include <string>
 #include <iostream>
-#include <stdexcept>
-#include <algorithm>
+#include <optional>
+#include <expected>
+#include <array>
 
 // Enum đại diện cho các thứ trong tuần
 enum class Day {
@@ -18,33 +20,43 @@ enum class Session {
 
 class Time {
 private:
-    // Mảng 2D: schedule[session][day], lưu lịch học
-    // 0: không có lớp, 1: có lớp
-    int schedule[2][6] = {}; // 2 buổi * 6 ngày (Thứ 2 đến Thứ 7)
+    // Mảng lưu tên lớp học tại từng thời điểm: [buổi][ngày]
+    std::array<std::array<std::string, 6>, 2> schedule{};
 
 public:
-    // Đánh dấu 1 buổi học cụ thể là đã có lớp
-    void mark(const std::string& dayStr, const std::string& sessionStr);
+    // Đánh dấu (đăng ký lớp học) tại một ngày + buổi
+    void mark(const std::string& dayStr, const std::string& sessionStr, const std::string& className);
 
-    // Bỏ đánh dấu buổi học (xóa lớp học tại thời điểm đó)
+    // Bỏ đánh dấu (xóa lớp học) tại một ngày + buổi
     void unmark(const std::string& dayStr, const std::string& sessionStr);
 
-    // Kiểm tra xem tại thời điểm đó có lớp không
+    // Trả về true nếu tại thời điểm đó có lớp học
     bool isMarked(Day day, Session session) const;
 
-    // In toàn bộ thời khóa biểu
+    // Lấy tên lớp học tại một ngày + buổi (nếu có)
+    std::string getClassAt(Day day, Session session) const;
+
+    // In toàn bộ thời khóa biểu ra console
     void print() const;
 
-    // Chuyển từ chuỗi → Enum Day
+    // ==========================
+    // Các hàm static hỗ trợ xử lý chuỗi → enum (và ngược lại)
+    // ==========================
+
+    // Chuyển chuỗi → Day enum (throw exception nếu lỗi)
     static Day stringToDay(const std::string& dayStr);
 
-    // Chuyển từ chuỗi → Enum Session
+    // Chuyển chuỗi → Session enum (throw exception nếu lỗi)
     static Session stringToSession(const std::string& sessionStr);
 
-    // Chuyển Day enum thành chỉ số index trong mảng
-    static int dayToIndex(Day day);
+    // Chuyển chuỗi → Day enum (trả về optional)
+    static std::optional<Day> tryStringToDay(const std::string& dayStr);
 
-    // Chuyển Session enum thành chỉ số index trong mảng
+    // Chuyển chuỗi → Session enum (trả về optional)
+    static std::optional<Session> tryStringToSession(const std::string& sessionStr);
+
+    // Chuyển enum → chỉ số trong mảng
+    static int dayToIndex(Day day);
     static int sessionToIndex(Session session);
 };
 

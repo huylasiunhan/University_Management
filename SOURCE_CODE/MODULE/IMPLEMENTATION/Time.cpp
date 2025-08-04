@@ -1,68 +1,89 @@
-#include "../HEADER/Time.h"
+#include "Time.h"
+#include <algorithm>
 
-// Chuyển từ chuỗi ngày ("Monday", "mon",...) sang enum Day
-Day Time::stringToDay(const std::string& dayStr) {
-    std::string d = dayStr;
-    std::transform(d.begin(), d.end(), d.begin(), ::tolower); // đưa về chữ thường
-
-    if (d == "monday" || d == "mon") return Day::Monday;
-    if (d == "tuesday" || d == "tue") return Day::Tuesday;
-    if (d == "wednesday" || d == "wed") return Day::Wednesday;
-    if (d == "thursday" || d == "thu") return Day::Thursday;
-    if (d == "friday" || d == "fri") return Day::Friday;
-    if (d == "saturday" || d == "sat") return Day::Saturday;
-
-    throw std::invalid_argument("Invalid day: " + dayStr);
-}
-
-// Chuyển từ chuỗi buổi ("Morning", "Afternoon") sang enum Session
-Session Time::stringToSession(const std::string& sessionStr) {
-    std::string s = sessionStr;
-    std::transform(s.begin(), s.end(), s.begin(), ::tolower); // đưa về chữ thường
-
-    if (s == "morning") return Session::Morning;
-    if (s == "afternoon") return Session::Afternoon;
-
-    throw std::invalid_argument("Invalid session: " + sessionStr);
-}
-
-// Chuyển enum Day thành chỉ số để truy cập mảng
-int Time::dayToIndex(Day day) {
-    return static_cast<int>(day); // Monday = 0, ..., Saturday = 5
-}
-
-// Chuyển enum Session thành chỉ số để truy cập mảng
-int Time::sessionToIndex(Session session) {
-    return static_cast<int>(session); // Morning = 0, Afternoon = 1
-}
-
-// Đánh dấu buổi học là có lớp (gán = 1)
-void Time::mark(const std::string& dayStr, const std::string& sessionStr) {
+void Time::mark(const std::string& dayStr, const std::string& sessionStr, const std::string& className) {
     Day day = stringToDay(dayStr);
     Session session = stringToSession(sessionStr);
-    schedule[sessionToIndex(session)][dayToIndex(day)] = 1;
+    schedule[sessionToIndex(session)][dayToIndex(day)] = className;
 }
 
-// Xóa đánh dấu buổi học (gán lại = 0)
 void Time::unmark(const std::string& dayStr, const std::string& sessionStr) {
     Day day = stringToDay(dayStr);
     Session session = stringToSession(sessionStr);
-    schedule[sessionToIndex(session)][dayToIndex(day)] = 0;
+    schedule[sessionToIndex(session)][dayToIndex(day)] = "";
 }
 
-// Trả về true nếu đã đánh dấu buổi học (tức là có lớp học tại thời điểm đó)
 bool Time::isMarked(Day day, Session session) const {
-    return schedule[sessionToIndex(session)][dayToIndex(day)] == 1;
+    return !schedule[sessionToIndex(session)][dayToIndex(day)].empty();
 }
 
-// In lịch học dưới dạng bảng
+std::string Time::getClassAt(Day day, Session session) const {
+    return schedule[sessionToIndex(session)][dayToIndex(day)];
+}
+
 void Time::print() const {
-    std::cout << "Schedule:\n";
-    for (int row = 0; row < 2; ++row) {
-        std::cout << (row == 0 ? "Morning:   " : "Afternoon: ");
-        for (int col = 0; col < 6; ++col) {
-            std::cout << schedule[row][col] << " ";
+    const std::string days[] = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
+    const std::string sessions[] = {"Morning", "Afternoon"};
+
+    std::cout << "Schedule:\n\t";
+    for (const auto& day : days) {
+        std::cout << day << "\t";
+    }
+    std::cout << "\n";
+
+    for (int i = 0; i < 2; ++i) {
+        std::cout << sessions[i] << ":\t";
+        for (int j = 0; j < 6; ++j) {
+            const std::string& className = schedule[i][j];
+            std::cout << (className.empty() ? "-" : className) << "\t";
         }
         std::cout << "\n";
     }
+}
+
+// ============ SAFE STRING PARSING (optional-based) =============
+
+std::optional<Day> Time::tryStringToDay(const std::string& dayStr) {
+    std::string day = dayStr;
+    std::transform(day.begin(), day.end(), day.begin(), ::tolower);
+    if (day == "monday" || day == "mon") return Day::Monday;
+    if (day == "tuesday" || day == "tue") return Day::Tuesday;
+    if (day == "wednesday" || day == "wed") return Day::Wednesday;
+    if (day == "thursday" || day == "thu") return Day::Thursday;
+    if (day == "friday" || day == "fri") return Day::Friday;
+    if (day == "saturday" || day == "sat") return Day::Saturday;
+    return std::nullopt;
+}
+
+std::optional<Session> Time::tryStringToSession(const std::string& sessionStr) {
+    std::string session = sessionStr;
+    std::transform(session.begin(), session.end(), session.begin(), ::tolower);
+    if (session == "morning") return Session::Morning;
+    if (session == "afternoon") return Session::Afternoon;
+    return std::nullopt;
+}
+
+// ============ THROW-BASED STRING PARSING (for older API) =============
+
+Day Time::stringToDay(const std::string& dayStr) {
+    auto result = tryStringToDay(dayStr);
+    if (!result) throw std::invalid_argument("Invalid day: " + dayStr);
+    return *result;
+}
+
+Session Time::stringToSession(const std::string& sessionStr) {
+    auto result = tryStringToSession(sessionStr);
+    if (!result) throw std::invalid_argument("Invalid session: " + sessionStr);
+    return *result;
+}
+
+
+// ============ MAPPING ENUM TO INDEX =============
+
+int Time::dayToIndex(Day day) {
+    return static_cast<int>(day);
+}
+
+int Time::sessionToIndex(Session session) {
+    return static_cast<int>(session);
 }
