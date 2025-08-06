@@ -1,0 +1,4 @@
+ID,Name,CoursesIDs,StudentId
+M001,Khoa học Máy tính,C001;C002,S001;S002;S003;S005
+M002,Kỹ thuật Phần mềm,C002;C003,S004;S006;S007;S008
+M003,Hệ thống thông tin,C004,S009;S010

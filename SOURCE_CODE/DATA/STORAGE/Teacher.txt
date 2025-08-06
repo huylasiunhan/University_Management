@@ -1,0 +1,5 @@
+ID,Name,email,TeachingClassIDs
+T001,Tran Anh Tuan,tuan.at@example.com,CS001;CS002
+T002,Nguyen Thanh Mai,mai.nt@example.com,CS004
+T003,Le Duc Hung,hung.ld@example.com,CS005
+T004,Vo Thi Kim Anh,anh.vtk@example.com,CS003
