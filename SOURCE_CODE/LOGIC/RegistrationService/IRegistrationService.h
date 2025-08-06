@@ -24,5 +24,5 @@ public:
 
     virtual void clearRegistrations(const std::shared_ptr<Student>& student) = 0;
 
-    virtual std::vector<RegistrationRecord> getHistory(const std::shared_ptr<Student>& student) const = 0;
+    //virtual std::vector<RegistrationRecord> getHistory(const std::shared_ptr<Student>& student) const = 0;
 };

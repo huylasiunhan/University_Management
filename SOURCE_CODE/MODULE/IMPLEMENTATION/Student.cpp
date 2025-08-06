@@ -18,9 +18,18 @@ const std::vector<std::shared_ptr<Score>>& Student::getScores() const {
     return scores;
 }
 
+void Student::setScores(const std::vector<std::shared_ptr<Score>>& newScores) {
+    scores = newScores;
+}
+
 const std::vector<std::shared_ptr<ClassSection>>& Student::getEnrolledClasses() const {
     return enrolledClasses;
 }
+
+void Student::setEnrolledClasses(const std::vector<std::shared_ptr<ClassSection>>& newClasses) {
+    enrolledClasses = newClasses;
+}
+
 
 
 std::vector<Student*> studentParser::parseFromFile(const std::string& filename, const std::vector<Major*>& majors) {

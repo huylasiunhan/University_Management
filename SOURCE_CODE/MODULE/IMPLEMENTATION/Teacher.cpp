@@ -11,6 +11,10 @@ std::vector<std::shared_ptr<ClassSection>>& Teacher::getTeachingClasses() {
     return teachingClasses;
 }
 
+void Teacher::setTeachingClasses(const std::vector<std::shared_ptr<ClassSection>>& classes) {
+    teachingClasses = classes;
+}
+
 void Teacher::addClass(const std::shared_ptr<ClassSection>& cls) {
     teachingClasses.push_back(cls);
 }

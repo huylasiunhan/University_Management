@@ -24,7 +24,11 @@ public:
     void setMajor(std::shared_ptr<Major> major);
 
     const std::vector<std::shared_ptr<Score>>& getScores() const;
+    void setScores(const std::vector<std::shared_ptr<Score>>& newScores);
+
+
     const std::vector<std::shared_ptr<ClassSection>>& getEnrolledClasses() const;
+    void setEnrolledClasses(const std::vector<std::shared_ptr<ClassSection>>& newClasses);
 };
 
 class studentParser {

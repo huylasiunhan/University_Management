@@ -9,7 +9,6 @@
 
 class IMajorService {
 public:
-
     // trả về danh sách các môn học còn lại của sinh viên
     virtual std::vector<Course> getRemainingCourses(const std::shared_ptr<Student>& student) const = 0;
 

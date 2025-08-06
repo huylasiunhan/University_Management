@@ -59,8 +59,7 @@ double MajorService::calculateGPA(const std::shared_ptr<Student>& student) const
     return total / scores.size();
 }
 
-
-//hasnt had getCredit method in Course class
+//chưa có getCredit method trong Course class
 /*
 int MajorService::getTotalCredits(const Student& studentId) const {
     const auto& scores = studentId.getScores(); // vector<Score*>
@@ -91,7 +90,7 @@ std::string MajorService::classifyDegree(double gpa) const {
     return "Weak";
 }
 
-//delete the getRequiredCourses temporary 
+//xóa getRequiredCourses tạm thời 
 /*
 std::vector<Course> MajorService::getRequiredCourses(const Major& majorId) const {
     // Giả sử các course đầu danh sách là bắt buộc (tuỳ logic cụ thể)
@@ -103,7 +102,7 @@ std::vector<Course> MajorService::getRequiredCourses(const Major& majorId) const
 }
 */
 
-//delete the getElectiveCourses temporary
+//xóa getElectiveCourses tạm thời
 /*
 std::vector<Course> MajorService::getElectiveCourses(const Major& majorId) const {
     std::vector<Course> result;
@@ -130,9 +129,15 @@ std::vector<Student> MajorService::getStudentsInMajor(const Major& majorId) cons
     return result;
 }
 
-void MajorService::assignStudentToMajor(const Student& studentId, const Major& majorId) {
-    _studentsByMajor[majorId.getName()].push_back(std::make_shared<Student>(studentId));
+/*
+void MajorService::assignStudentToMajor(const std::shared_ptr<Student>& student, const std::shared_ptr<Major>& major) {
+    // Gán chuyên ngành cho sinh viên
+    student->setMajor(major);
+
+    // Thêm sinh viên vào danh sách của chuyên ngành đó
+    _studentsByMajor[major->getName()].push_back(student);
 }
+*/
 
 void MajorService::removeStudentFromMajor(const std::shared_ptr<Student>& student) {
     auto majorPtr = student->getMajor();
