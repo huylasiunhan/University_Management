@@ -1,6 +1,6 @@
 #include "Course.h"
 #include "FileManaging.h"
-#include "stringUtils.h"
+#include "StringUtils.h"
 #include <utility>
 #include <vector>
 #include <string>

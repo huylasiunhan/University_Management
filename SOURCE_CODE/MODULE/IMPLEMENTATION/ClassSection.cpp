@@ -1,6 +1,6 @@
 #include "ClassSection.h"
 #include "FileManaging.h"
-#include "stringUtils.h"
+#include "StringUtils.h"
 #include <sstream>
 #include <utility>
 #include <vector>
