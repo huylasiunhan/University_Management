@@ -65,6 +65,6 @@ public:
                                                           const vector<shared_ptr<Teacher>>& allTeachers,
                                                           const vector<shared_ptr<Student>>& allStudents,
                                                           const vector<shared_ptr<Score>>& allScores);
-}
+};
 
 #endif 

@@ -3,17 +3,19 @@
 #include "../HEADER/ClassSection.h"
 #include "../../DATA/DATA_ACCESSING/FileManaging.h"
 #include <sstream>
+#include <iostream>
+#include <memory>
 
 // Constructor gán sinh viên và lớp học phần tương ứng
-Score::Score(Student* student, ClassSection* section)
-    : studentID(student), sectionID(section) {}
+Score::Score(std::shared_ptr<Student> student, std::shared_ptr<ClassSection> section)
+    : studentID(std::move(student)), sectionID(std::move(section)) {}
 
 // Getters
-Student* Score::getStudent() const {
+std::shared_ptr<Student> Score::getStudent() const {
     return studentID;
 }
 
-ClassSection* Score::getSection() const {
+std::shared_ptr<ClassSection> Score::getSection() const {
     return sectionID;
 }
 
@@ -49,7 +51,7 @@ void Score::setOther(float o) {
     computeTotal();
 }
 
-// Hàm tính tổng điểm theo trọng số quy định (có thể tuỳ chỉnh nếu cần)
+// Hàm tính tổng điểm theo trọng số quy định
 void Score::computeTotal() {
     total = 0.3f * midterm + 0.5f * finalExam + 0.2f * other;
 }
@@ -62,10 +64,11 @@ void Score::print() const {
               << ", Total: " << total << std::endl;
 }
 
+// ---------------------------- ScoreParser ----------------------------
 
-std::vector<Score> ScoreParser::parse(const string& fileInput) {
+std::vector<Score> ScoreParser::parse(const std::string& fileInput) {
     FileManager fm;
-    vector<string> lines = fm.fileReader(fileInput);
+    std::vector<std::string> lines = fm.fileReader(fileInput);
     
     std::vector<Score> scores;
 
@@ -88,13 +91,13 @@ std::vector<Score> ScoreParser::parse(const string& fileInput) {
         std::getline(ss, token, ',');
         finalExam = std::stof(token);
 
-        // Tạo Score với nullptr (sẽ ánh xạ sau)
-        Score score(nullptr, nullptr);
+        // TODO: Map studentIDStr và sectionIDStr thành đối tượng thực tế nếu cần
+        std::shared_ptr<Student> student = nullptr;
+        std::shared_ptr<ClassSection> section = nullptr;
 
-        // Gán các giá trị
+        Score score(student, section);
         score.setMidterm(midterm);
         score.setFinalExam(finalExam);
-        // Bạn có thể gọi computeTotal() ở đây nếu cần
         score.computeTotal();
 
         scores.push_back(score);

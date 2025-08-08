@@ -1,6 +1,8 @@
 #include "Time.h"
 #include <algorithm>
+#include <utility>
 
+using namespace std;
 
 // Constructor to initialize the schedule with a class name at a specific index
 Time::Time(pair<int, int> scheduleIndex, const std::string& className) {

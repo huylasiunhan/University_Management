@@ -21,7 +21,7 @@ std::expected<vector<Score>, string> ScoreService::getScoresBySection(const stri
     vector<Score> result;
 
     for (const auto& score : scores) {
-        if (score.getSection() && score.getSection()->getID() == sectionID) {
+        if (score.getSection() && score.getSection()->getClassID() == sectionID) {
             result.push_back(score);
         }
     }
@@ -40,7 +40,7 @@ std::expected<Score, string> ScoreService::getScoreByStudentAndSection(const str
     for (const auto& score : scores) {
         if (score.getStudent() && score.getSection() &&
             score.getStudent()->getID() == studentID &&
-            score.getSection()->getID() == sectionID) {
+            score.getSection()->getClassID() == sectionID) {
             return score;
         }
     }
