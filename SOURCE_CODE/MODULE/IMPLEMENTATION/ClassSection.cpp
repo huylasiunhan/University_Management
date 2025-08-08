@@ -71,6 +71,19 @@ void ClassSection::setSchedule(const Time& schedule) {
     _Schedule = schedule;
 }
 
+void ClassSection::addStudent(shared_ptr<Student> student) {
+    _students.push_back(student);
+}
+
+void ClassSection::removeStudent(shared_ptr<Student> student) {
+    auto it = remove_if(_students.begin(), _students.end(),
+                        [&](const shared_ptr<Student>& s) { return s->getId() == student->getId(); });
+    if (it != _students.end()) {
+        _students.erase(it, _students.end());
+    }
+}
+
+
 // function to split a string by a delimiter
 vector<string> split(const string& str, char delimiter) {
     vector<string> tokens;

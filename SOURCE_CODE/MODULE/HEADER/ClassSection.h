@@ -45,6 +45,9 @@ public:
     void setScore(shared_ptr<Score> score);
     void setSchedule(const Time& schedule);
 
+    void addStudent(shared_ptr<Student> student);
+    void removeStudent(shared_ptr<Student> student);
+
     // Destructor
     ~ClassSection() {
         // Destructor logic if needed

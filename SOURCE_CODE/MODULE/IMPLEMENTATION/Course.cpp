@@ -49,6 +49,28 @@ void Course::setClassSectionIds(const vector<shared_ptr<ClassSection>>& classSec
     _classSectionIds = classSectionIds;
 }
 
+void Course::addClass(shared_ptr<ClassSection> classSection) {
+    _classSectionIds.push_back(classSection);
+}
+
+void Course::removeClass(const shared_ptr<ClassSection>& classSection) {
+    auto it = remove_if(_classSectionIds.begin(), _classSectionIds.end(),
+                        [&](const shared_ptr<ClassSection>& cs) { return cs->getClassID() == classSection->getClassID(); });
+    if (it != _classSectionIds.end()) {
+        _classSectionIds.erase(it, _classSectionIds.end());
+    }
+}
+
+float Course::getCourseScore(const shared_ptr<Student>& student) const {
+    // Placeholder logic for getting course score for a student
+    return 0.0; // This should be replaced with actual logic
+}
+
+bool Course::isPass(const shared_ptr<Student>& student) const {
+    // Placeholder logic for checking if a student has passed the course
+    return false; // This should be replaced with actual logic
+}
+
 // function to split a string by a delimiter
 vector<string> split(const string& str, char delimiter) {
     vector<string> tokens;

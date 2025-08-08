@@ -31,6 +31,11 @@ public:
     void setMajorId(const vector<shared_ptr<Major>>& majorId);
     void setClassSectionIds(const vector<shared_ptr<ClassSection>>& classSectionIds);
 
+    void addClass(shared_ptr<ClassSection> classSection);
+    void removeClass(const shared_ptr<ClassSection>& classSection);
+    float getCourseScore(const shared_ptr<Student>& student) const; // Assuming this method returns the score of a student in this course
+    bool isPass(const shared_ptr<Student>& student) const; // Assuming this method checks if a student has passed the course
+
     // Destructor
     ~Course() {
         // Destructor logic if needed
