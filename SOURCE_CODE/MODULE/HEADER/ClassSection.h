@@ -3,53 +3,68 @@
 
 #include <string>
 #include <vector>
-#include <utility>
+#include <memory>
+#include "Course.h"
+#include "Teacher.h"
+#include "Student.h"
+#include "Score.h"
+#include "Time.h"
+
 using namespace std;
 
 class ClassSection {
 private:
-    string _id;
-    string _courseId;
-    string _teacherId;
-    string _scoreId;
-    pair<int, int> _scheduleIndex;
-    vector<string> _studentIds;
+    string _classID;
+    shared_ptr<Course> _course;
+    shared_ptr<Teacher> _teacher;
+    vector<shared_ptr<Student>> _students;
+    shared_ptr<Score> _score;
+    Time _Schedule;
 
 public:
-    // Constructor không đối số
+    // Default constructor
     ClassSection();
 
-    // Constructor có đối số
-    ClassSection(const string& id, const string& courseId,
-                 const string& teacherId, const string& scoreId,
-                 const pair<int,int>& scheduleIndex,
-                 const vector<string>& studentIds);
+    // Parameterized constructor
+    ClassSection(const string& classID, shared_ptr<Course> course, shared_ptr<Teacher> teacher,
+                 const vector<shared_ptr<Student>>& students, shared_ptr<Score> score, const Time& schedule);
 
-    // Getter
-    string getId() const;
-    string getCourseId() const;
-    string getTeacherId() const;
-    string getScoreId() const;
-    pair<int,int> getScheduleIndex() const;
-    vector<string> getStudentIds() const;
+    // Getters
+    string getClassID() const;
+    shared_ptr<Course> getCourse() const;
+    shared_ptr<Teacher> getTeacher() const;
+    vector<shared_ptr<Student>> getStudents() const;
+    shared_ptr<Score> getScore() const;
+    Time getSchedule() const;
 
-    // Setter
-    void setId(const string& id);
-    void setCourseId(const string& courseId);
-    void setTeacherId(const string& teacherId);
-    void setScoreId(const string& scoreId);
-    void setScheduleIndex(const pair<int,int>& scheduleIndex);
-    void setStudentIds(const vector<string>& studentIds);
+    // Setters
+    void setClassID(const string& classID);
+    void setCourse(shared_ptr<Course> course);
+    void setTeacher(shared_ptr<Teacher> teacher);
+    void setStudents(const vector<shared_ptr<Student>>& students);
+    void setScore(shared_ptr<Score> score);
+    void setSchedule(const Time& schedule);
 
     // Destructor
-    ~ClassSection();
+    ~ClassSection() {
+        // Destructor logic if needed
+    }
     // Friend class for parsing
     friend class ParserClassSection;
 };
 class ParserClassSection {
 public:
-    static ClassSection parseFromLine(const string& line);
-    static vector<ClassSection> parseFromFile(const string& filename);
-};
+    static shared_ptr<ClassSection> parseFromString(const string& line,
+                                                    const vector<shared_ptr<Course>>& allCourses,
+                                                    const vector<shared_ptr<Teacher>>& allTeachers,
+                                                    const vector<shared_ptr<Student>>& allStudents,
+                                                    const vector<shared_ptr<Score>>& allScores);
+
+    static vector<shared_ptr<ClassSection>> parseFromFile(const string& filename,
+                                                          const vector<shared_ptr<Course>>& allCourses,
+                                                          const vector<shared_ptr<Teacher>>& allTeachers,
+                                                          const vector<shared_ptr<Student>>& allStudents,
+                                                          const vector<shared_ptr<Score>>& allScores);
+}
 
 #endif 

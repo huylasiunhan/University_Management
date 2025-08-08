@@ -16,6 +16,8 @@ private:
     friend class ParserStudent;
     friend class ParserTeacher;
     friend class ScoreParser;
+    friend class ParserCourse;
+    friend class ParserClassSection;
 };
 
 

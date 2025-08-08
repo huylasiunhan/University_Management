@@ -1,6 +1,21 @@
 #include "Time.h"
 #include <algorithm>
 
+
+// Constructor to initialize the schedule with a class name at a specific index
+Time::Time(pair<int, int> scheduleIndex, const std::string& className) {
+    // Initialize the schedule with empty strings
+    for (auto& session : schedule) {
+        session.fill("");
+    }
+    // Mark the class at the specified index
+    if (scheduleIndex.first >= 0 && scheduleIndex.first < 2 &&
+        scheduleIndex.second >= 0 && scheduleIndex.second < 6) {
+        schedule[scheduleIndex.first][scheduleIndex.second] = className;
+    } else {
+        throw std::out_of_range("Invalid schedule index");
+    }
+}
 void Time::mark(const std::string& dayStr, const std::string& sessionStr, const std::string& className) {
     Day day = stringToDay(dayStr);
     Session session = stringToSession(sessionStr);

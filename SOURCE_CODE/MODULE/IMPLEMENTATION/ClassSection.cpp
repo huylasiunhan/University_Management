@@ -1,76 +1,170 @@
 #include "ClassSection.h"
+#include "Course.h"
+#include "Teacher.h"
+#include "Student.h"
+#include "Score.h"
+#include "Time.h"
 #include "FileManaging.h"
-#include "StringUtils.h"
+#include "ParserCourse.h"
+#include "ParserTeacher.h"
+#include "ParserStudent.h"
+#include "ScoreParser.h"
 #include <sstream>
-#include <utility>
 #include <vector>
 #include <string>
+#include <utility>
+#include <memory>
+
 
 using namespace std;   
+ClassSection::ClassSection() : _classID(""), _course(nullptr), _teacher(nullptr), _score(nullptr) {}
 
-ClassSection::ClassSection() : _id(""), _courseId(""), _teacherId(""), _scoreId(""), _scheduleIndex({0, 0}), _studentIds({}) {}
+ClassSection::ClassSection(const string& classID, shared_ptr<Course> course, shared_ptr<Teacher> teacher,
+                           const vector<shared_ptr<Student>>& students, shared_ptr<Score> score, const Time& schedule)
+    : _classID(classID), _course(course), _teacher(teacher), _students(students), _score(score), _Schedule(schedule) {}
 
-ClassSection::ClassSection(const string& id, const string& courseId,
-                           const string& teacherId, const string& scoreId,
-                           const pair<int,int>& scheduleIndex,
-                           const vector<string>& studentIds)
-    : _id(id), _courseId(courseId), _teacherId(teacherId), _scoreId(scoreId),
-      _scheduleIndex(scheduleIndex), _studentIds(studentIds) {}
-
-string ClassSection::getId() const { return _id; }
-string ClassSection::getCourseId() const { return _courseId; }
-string ClassSection::getTeacherId() const { return _teacherId; }
-string ClassSection::getScoreId() const { return _scoreId; }
-pair<int,int> ClassSection::getScheduleIndex() const { return _scheduleIndex; }
-vector<string> ClassSection::getStudentIds() const { return _studentIds; }
-
-void ClassSection::setId(const string& id) { _id = id; }
-void ClassSection::setCourseId(const string& courseId) { _courseId = courseId; }
-void ClassSection::setTeacherId(const string& teacherId) { _teacherId = teacherId; }
-void ClassSection::setScoreId(const string& scoreId) { _scoreId = scoreId; }
-void ClassSection::setScheduleIndex(const pair<int,int>& scheduleIndex) {
-    _scheduleIndex = scheduleIndex;
-}
-void ClassSection::setStudentIds(const vector<string>& studentIds) {
-    _studentIds = studentIds;
+string ClassSection::getClassID() const {
+    return _classID;
 }
 
-ClassSection::~ClassSection() {}        
-
-static pair<int,int> parseScheduleIndex(const string& scheduleStr) {
-    stringstream ss(scheduleStr);
-    string rowStr, colStr;
-    getline(ss, rowStr, ',');
-    getline(ss, colStr, ',');
-    return {stoi(rowStr), stoi(colStr)};
+shared_ptr<Course> ClassSection::getCourse() const {
+    return _course;
 }
 
-ClassSection ClassSectionParser::parseFromLine(const string& line) {
-    stringstream ss(line);
-    string id, courseId, teacherId, scoreId, scheduleStr, studentsStr;
-
-    getline(ss, id, ',');
-    getline(ss, courseId, ',');
-    getline(ss, teacherId, ',');
-    getline(ss, scoreId, ',');
-    getline(ss, scheduleStr, ',');
-    getline(ss, studentsStr);
-
-    vector<string> students = split(studentsStr, ';');
-    pair<int,int> schedule = parseScheduleIndex(scheduleStr);
-
-    return ClassSection(id, courseId, teacherId, scoreId, schedule, students);
+shared_ptr<Teacher> ClassSection::getTeacher() const {
+    return _teacher;
 }
 
+vector<shared_ptr<Student>> ClassSection::getStudents() const {
+    return _students;
+}
 
-vector<ClassSection> ParserClassSection::parseFromFile(const string& filename) {
-    FileManager fm;
-    vector<string> lines = fm.fileReader(filename);
-    vector<ClassSection> classSections;
+shared_ptr<Score> ClassSection::getScore() const {
+    return _score;
+}
 
-    for (const auto& line : lines) {
-        ClassSection classSection = parseFromLine(line);
-        classSections.push_back(classSection);
+Time ClassSection::getSchedule() const {
+    return _Schedule;
+}
+
+void ClassSection::setClassID(const string& classID) {
+    _classID = classID;
+}
+
+void ClassSection::setCourse(shared_ptr<Course> course) {
+    _course = course;
+}
+
+void ClassSection::setTeacher(shared_ptr<Teacher> teacher) {
+    _teacher = teacher;
+}
+
+void ClassSection::setStudents(const vector<shared_ptr<Student>>& students) {
+    _students = students;
+}
+
+void ClassSection::setScore(shared_ptr<Score> score) {
+    _score = score;
+}
+
+void ClassSection::setSchedule(const Time& schedule) {
+    _Schedule = schedule;
+}
+
+// function to split a string by a delimiter
+vector<string> split(const string& str, char delimiter) {
+    vector<string> tokens;
+    string token;
+    stringstream ss(str);
+    while (getline(ss, token, delimiter)) {
+        tokens.push_back(token);
     }
-    return classSections;
+    return tokens;
 }
+
+
+shared_ptr<ClassSection> ParserClassSection::parseFromString(const string& line,
+                                                            const vector<shared_ptr<Course>>& allCourses,
+                                                            const vector<shared_ptr<Teacher>>& allTeachers,
+                                                            const vector<shared_ptr<Student>>& allStudents,
+                                                            const vector<shared_ptr<Score>>& allScores) {
+    stringstream ss(line);
+    string classID, courseID, teacherID, scoreID, scheduleIndexStr, studentIDsStr;
+
+    getline(ss, classID, ',');
+    getline(ss, courseID, ',');
+    getline(ss, teacherID, ',');
+    getline(ss, scoreID, ',');
+    getline(ss, scheduleIndexStr, ',');
+    getline(ss, studentIDsStr);
+
+    // Parse schedule index
+    pair<int,int> scheduleIndex;
+    stringstream scheduleStream(scheduleIndexStr);
+    string temp;
+    getline(scheduleStream, temp, '-');
+    scheduleIndex.first = stoi(temp);
+    getline(scheduleStream, temp);
+    scheduleIndex.second = stoi(temp);
+    
+    // Find Course object by ID
+    shared_ptr<Course> course = nullptr;
+    for (const auto& c : allCourses) {
+        if (c->getId() == courseID) {
+            course = c;
+            break;
+        }
+    }
+    
+    // Find Teacher object by ID
+    shared_ptr<Teacher> teacher = nullptr;
+    for (const auto& t : allTeachers) {
+        if (t->getId() == teacherID) {
+            teacher = t;
+            break;
+        }
+    }   
+    
+    // Find Score object by ID
+    shared_ptr<Score> score = nullptr;
+    for (const auto& s : allScores) {
+        if (s->getId() == scoreID) {
+            score = s;
+            break;
+        }
+    }
+    // Parse student IDs
+    vector<shared_ptr<Student>> students;
+    vector<string> studentIDs = split(studentIDsStr, ';');
+    for (const auto& studentID : studentIDs) {
+        for (const auto& student : allStudents) {
+            if (student->getId() == studentID) {
+                students.push_back(student);
+                break;
+            }
+        }
+    }
+
+    // Create and return a new ClassSection object
+    return make_shared<ClassSection>(classID, course, teacher, students, score, Time(scheduleIndex, classID));  
+
+}
+
+vector<shared_ptr<ClassSection>> ParserClassSection::parseFromFile(const string& filename,
+                                                                  const vector<shared_ptr<Course>>& allCourses,
+                                                                  const vector<shared_ptr<Teacher>>& allTeachers,
+                                                                  const vector<shared_ptr<Student>>& allStudents,
+                                                                  const vector<shared_ptr<Score>>& allScores) {
+    vector<shared_ptr<ClassSection>> classSections;
+    vector<string> lines = FileManager::fileReader(filename);
+    
+    for (const auto& line : lines) {
+        shared_ptr<ClassSection> section = parseFromString(line, allCourses, allTeachers, allStudents, allScores);
+        if (section) {
+            classSections.push_back(section);
+        }
+    }
+    
+    return classSections;
+}   
+  

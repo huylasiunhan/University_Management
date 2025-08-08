@@ -24,6 +24,9 @@ private:
     std::array<std::array<std::string, 6>, 2> schedule{};
 
 public:
+    // Constructor cần thiết cho việc khởi tạo lịch học
+    Time(pair<int, int> scheduleIndex, const std::string& className);
+
     // Đánh dấu (đăng ký lớp học) tại một ngày + buổi
     void mark(const std::string& dayStr, const std::string& sessionStr, const std::string& className);
 

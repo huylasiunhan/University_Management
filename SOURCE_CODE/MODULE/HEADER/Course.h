@@ -6,39 +6,45 @@ using namespace std;
 
 class Course {
 private:
-    string _majorId;
+    vector<shared_ptr<Major>> _majorId; 
     string _id;
     string _name;
-    vector<string> _classSectionIds;
+    vector<shared_ptr<ClassSection>> _classSectionIds;
 
 public:
-    // Constructor không đối số
+    // Default constructor
     Course();
 
-    // Constructor có đối số
-    Course(const string& majorId, const string& id, 
-           const string& name, const vector<string>& classSectionIds);
+    // Parameterized constructor
+    Course(const string& id, const string& name, const vector<shared_ptr<Major>>& majorId,
+           const vector<shared_ptr<ClassSection>>& classSectionIds);
 
-    // Getter
-    string getMajorId() const;
+    // Getters
     string getId() const;
     string getName() const;
-    vector<string> getClassSectionIds() const;
+    vector<shared_ptr<Major>> getMajorId() const;
+    vector<shared_ptr<ClassSection>> getClassSectionIds() const;
 
-    // Setter
-    void setMajorId(const string& majorId);
+    // Setters
     void setId(const string& id);
     void setName(const string& name);
-    void setClassSectionIds(const vector<string>& classSectionIds);
+    void setMajorId(const vector<shared_ptr<Major>>& majorId);
+    void setClassSectionIds(const vector<shared_ptr<ClassSection>>& classSectionIds);
 
     // Destructor
-    ~Course();
+    ~Course() {
+        // Destructor logic if needed
+    }
     friend class ParserCourse;
 };
 class ParserCourse {
 public:
-    static Course parseFromLine(const string& line);
-    static vector<Course> parseFromFile(const string& filename);
+    static shared_ptr<Course> parseFromString(const string& line,
+                                              const vector<shared_ptr<Major>>& allMajors,
+                                              const vector<shared_ptr<ClassSection>>& allClassSections);
+    static vector<shared_ptr<Course>> parseFromFile(const string& filename,
+                                                    const vector<shared_ptr<Major>>& allMajors,
+                                                    const vector<shared_ptr<ClassSection>>& allClassSections);
 };
 
 #endif
